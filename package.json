@@ -1,0 +1,26 @@
+{
+	"name": "bitis",
+	"version": "1.0.0",
+	"description": "",
+	"main": "cli/index.js",
+	"bin": {
+		"bitis": "cli/index.js"
+	},
+	"scripts": {
+		"start": "node .",
+		"postinstall": "node ./install.js",
+		"build": "bitis build"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "MIT",
+	"dependencies": {
+		"esbuild": "^0.15.7",
+		"express": "^4.18.1",
+		"socket.io": "^4.5.2"
+	},
+	"devDependencies": {
+		"@types/express": "^4.17.13",
+		"@types/node": "^18.7.16"
+	}
+}
