@@ -14,18 +14,18 @@ module.exports.Prefix = function Prefix(prefix) {
     };
   };
 };
-module.exports.initSocketsServer = function initSocketsServer({ http, mm, lm, distDir, BitisSocketsConfig = {}, onError = console.error }) {
+module.exports.initSocketsServer = function initSocketsServer({ http, mm, lm, distDir, bitisSocketsConfig = {}, onError = console.error }) {
   const path = require('path');
   const SocketIO = require('socket.io');
   let io = null;
   const {
     port = process.env.PORT ? parseInt(process.env.PORT) : 80,
     events = {}
-  } = BitisSocketsConfig;
+  } = bitisSocketsConfig;
   if (http) {
-    io = new SocketIO.Server(http, BitisSocketsConfig);
+    io = new SocketIO.Server(http, bitisSocketsConfig);
   } else {
-    io = SocketIO(port, BitisSocketsConfig);
+    io = SocketIO(port, bitisSocketsConfig);
   }
   if (events.onBeforeConfig) {
     io = events.onBeforeConfig(io);

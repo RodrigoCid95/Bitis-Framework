@@ -55,8 +55,7 @@ const tsconfigPath = path.join(dirBase, 'tsconfig.json')
 if (!fs.existsSync(tsconfigPath)) {
   const tsconfig = {
     compilerOptions: {
-      baseUrl: "src",
-      outDir: "dist",
+      baseUrl: ".",
       declaration: true,
       emitDeclarationOnly: true,
       experimentalDecorators: true,

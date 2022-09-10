@@ -50,7 +50,7 @@ module.exports.Methods = {
   PUT: 'put',
   DELETE: 'delete'
 };
-module.exports.initHttpServer = function initHttpServer({ returnInstance = false, mm, distDir, mainDir, BitisHttpConfig = {}, onMessage = console.log }) {
+module.exports.initHttpServer = function initHttpServer({ returnInstance = false, mm, distDir, mainDir, bitisHttpConfig = {}, onMessage = console.log }) {
   const Path = require('path');
   const express = require('express');
   let app = express();
@@ -100,7 +100,7 @@ module.exports.initHttpServer = function initHttpServer({ returnInstance = false
     pathsPublic,
     engineTemplates,
     optionsUrlencoded
-  } = BitisHttpConfig;
+  } = bitisHttpConfig;
   app.set('port', port);
   let externalIp = null;
   if (dev && dev.showExternalIp) {
