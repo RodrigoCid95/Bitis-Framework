@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-const path = require('path');
-const fs = require('fs');
-const dirBase = process.env.npm_config_local_prefix;
+const path = require('path')
+const fs = require('fs')
+const dirBase = process.env.npm_config_local_prefix
 const packDir = path.join(dirBase, 'package.json')
 const pack = require(packDir)
 let config = {
@@ -64,6 +64,7 @@ if (!fs.existsSync(tsconfigPath)) {
       moduleResolution: "Node",
       sourceMap: true,
       strictNullChecks: true,
+      allowSyntheticDefaultImports: true,
       paths: {
         "config/*": ["config/*"],
         "controllers": ["controllers/*"],

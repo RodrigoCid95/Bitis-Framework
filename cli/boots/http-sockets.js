@@ -1,1 +1,39 @@
-var o=require("bitis/core"),a=require("bitis/http"),c=require("bitis/web-sockets");(async function(){let n=require("path"),l=n.resolve(__dirname,".."),e=n.resolve(__dirname,"."),g=n.join(e,"configProfiles"),r=new o.ConfigManager(require(g).default),m=n.join(e,"libs"),f=require(m),t=new o.LibraryManager(r,f);await t.build(i=>console.log(i));let u=n.join(e,"models"),d=require(u),s=new o.ModelsManager(d,t),p=(0,a.initHttpServer)({returnInstance:!0,mm:s,distDir:e,mainDir:l,bitisHttpConfig:r.getConfig("bitisHttpConfig"),onMessage:i=>console.log(i)});(0,c.initSocketsServer)({http:p,mm:s,lm:t,distDir:e,bitisSocketsConfig:r.getConfig("bitisSocketsConfig"),onError:i=>console.error(i)})})();
+var Imports = class {
+  a = "./configProfiles.js";
+  b = "./httpControllers.js";
+  c = "./socketsControllers.js";
+  d = "./libs.js";
+  e = "./models.js";
+  get configProfiles() {
+    const e = require(this.a), r = {};
+    return Object.keys(e).forEach((s) => r[s] = e[s]), r;
+  }
+  get httpControllers() {
+    const e = require(this.b), r = {};
+    return Object.keys(e).forEach((s) => r[s] = e[s]), r;
+  }
+  get socketsControllers() {
+    const e = require(this.c), r = {};
+    return Object.keys(e).forEach((s) => r[s] = e[s]), r;
+  }
+  get libs() {
+    const e = require(this.d), r = {};
+    return Object.keys(e).forEach((s) => r[s] = e[s]), r;
+  }
+  get models() {
+    const e = require(this.e), r = {};
+    return Object.keys(e).forEach((s) => r[s] = e[s]), r;
+  }
+};
+var imports = new Imports();
+var import_core = require("bitis/core");
+var import_http = require("bitis/http");
+var import_web_sockets = require("bitis/web-sockets");
+var { configProfiles, httpControllers, socketsControllers, libs, models } = imports;
+var configManager = new import_core.ConfigManager(configProfiles);
+var libraryManager = new import_core.LibraryManager(configManager, libs);
+var modelManager = new import_core.ModelManager(models, libraryManager);
+var bitisHttpConfig = configManager.getConfig("bitisHttpConfig");
+var bitisSocketsConfig = configManager.getConfig("bitisSocketsConfig");
+var http = (0, import_http.initHttpServer)({ returnInstance: true, modelManager, httpControllers, bitisHttpConfig });
+(0, import_web_sockets.initSocketsServer)({ http, modelManager, libraryManager, socketsControllers, bitisSocketsConfig });

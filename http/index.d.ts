@@ -1,6 +1,6 @@
 import * as express from 'express'
 import * as http from 'http'
-import { ModelsManager } from '../core'
+import { AnyClass, ModelManager } from '../core'
 export type ResponseError = {
   code?: string
   message: string
@@ -143,9 +143,8 @@ export type BitisHTTPConfigProfile = {
 }
 export type OptionsHttpServer = {
   returnInstance?: boolean
-  mm: ModelsManager
-  distDir: string
-  mainDir: string
+  modelManager: ModelManager
+  httpControllers: AnyClass
   bitisHttpConfig: BitisHTTPConfigProfile
   onMessage?: (message: string) => void
 }

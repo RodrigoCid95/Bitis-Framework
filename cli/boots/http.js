@@ -1,1 +1,36 @@
-var n=require("bitis/core"),r=require("bitis/http");(async function(){let o=require("path"),a=o.resolve(__dirname,".."),e=o.resolve(__dirname,"."),l=o.join(e,"configProfiles"),t=new n.ConfigManager(require(l).default),c=o.join(e,"libs"),g=require(c),s=new n.LibraryManager(t,g);await s.build(i=>console.log(i));let m=o.join(e,"models"),f=require(m),d=new n.ModelsManager(f,s);(0,r.initHttpServer)({returnInstance:!1,mm:d,distDir:e,mainDir:a,bitisHttpConfig:t.getConfig("bitisHttpConfig"),onMessage:i=>console.log(i)})})();
+var Imports = class {
+  a = "./configProfiles.js";
+  b = "./httpControllers.js";
+  c = "./socketsControllers.js";
+  d = "./libs.js";
+  e = "./models.js";
+  get configProfiles() {
+    const e = require(this.a), r = {};
+    return Object.keys(e).forEach((s) => r[s] = e[s]), r;
+  }
+  get httpControllers() {
+    const e = require(this.b), r = {};
+    return Object.keys(e).forEach((s) => r[s] = e[s]), r;
+  }
+  get socketControllers() {
+    const e = require(this.c), r = {};
+    return Object.keys(e).forEach((s) => r[s] = e[s]), r;
+  }
+  get libs() {
+    const e = require(this.d), r = {};
+    return Object.keys(e).forEach((s) => r[s] = e[s]), r;
+  }
+  get models() {
+    const e = require(this.e), r = {};
+    return Object.keys(e).forEach((s) => r[s] = e[s]), r;
+  }
+};
+var imports = new Imports();
+var import_core = require("bitis/core");
+var import_http = require("bitis/http");
+var { configProfiles, httpControllers, libs, models } = imports;
+var configManager = new import_core.ConfigManager(configProfiles);
+var libraryManager = new import_core.LibraryManager(configManager, libs);
+var modelManager = new import_core.ModelManager(models, libraryManager);
+var bitisHttpConfig = configManager.getConfig("bitisHttpConfig");
+(0, import_http.initHttpServer)({ modelManager, httpControllers, bitisHttpConfig });

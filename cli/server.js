@@ -4,12 +4,12 @@
   //#region Declarations
   
   const path = require('path')
-  const { Flags, ConfigManager, LibraryManager, ModelsManager } = require('./../core')
+  const { Flags, ConfigManager, LibraryManager, ModelManager } = require('./../core')
   const flags = new Flags()
-  const mainDir = flags.get('mainDir')
   const distDir = flags.get('distDir')
   const configPath = path.join(distDir, 'configProfiles')
-  const cm = new ConfigManager(require(configPath).default)
+  const profiles = require(configPath)
+  const configManager = new ConfigManager(profiles)
   const typeServer = flags.get('type')
 
   //#endregion
@@ -17,55 +17,56 @@
 
   const initsPath = path.join(distDir, 'libs')
   const inits = require(initsPath)
-  const lm = new LibraryManager(cm, inits)
-  await lm.build(message => process.send(message))
+  const libraryManager = new LibraryManager(configManager, inits)
+  await libraryManager.build(message => process.send(message))
 
   //#endregion
   //#region Models
 
   const modelsPath = path.join(distDir, 'models')
   const modelClasses = require(modelsPath)
-  const mm = new ModelsManager(modelClasses, lm)
+  const modelManager = new ModelManager(modelClasses, libraryManager)
 
   //#endregion
   //#region Server
 
   if (typeServer === 'http') {
     const { initHttpServer } = require('./../http')
+    const httpControllers = require(`${distDir}/httpControllers`)
     initHttpServer({
-      returnInstance: false,
-      mm,
-      distDir,
-      mainDir,
-      bitisHttpConfig: cm.getConfig('bitisHttpConfig'),
+      modelManager,
+      httpControllers,
+      bitisHttpConfig: configManager.getConfig('bitisHttpConfig'),
       onMessage: message => process.send(message)
     })
   } else if (typeServer === 'sockets') {
     const { initSocketsServer } = require('./../web-sockets')
+    const socketsControllers = require(`${distDir}/socketsControllers`)
     initSocketsServer({
-      mm,
-      lm,
-      distDir,
-      bitisSocketsConfig: cm.getConfig('bitisSocketsConfig'),
+      modelManager,
+      libraryManager,
+      socketsControllers,
+      bitisSocketsConfig: configManager.getConfig('bitisSocketsConfig'),
       onError: error => process.send(error)
     })
   } else if (typeServer === 'http-sockets') {
     const { initHttpServer } = require('./../http')
+    const httpControllers = require(`${distDir}/httpControllers`)
+    const socketsControllers = require(`${distDir}/socketsControllers`)
     const http = initHttpServer({
       returnInstance: true,
-      mm,
-      distDir,
-      mainDir,
-      bitisHttpConfig: cm.getConfig('bitisHttpConfig'),
+      modelManager,
+      httpControllers,
+      bitisHttpConfig: configManager.getConfig('bitisHttpConfig'),
       onMessage: message => process.send(message)
     })
     const { initSocketsServer } = require('./../web-sockets')
     initSocketsServer({
       http,
-      mm,
-      lm,
-      distDir,
-      bitisSocketsConfig: cm.getConfig('bitisSocketsConfig'),
+      modelManager,
+      libraryManager,
+      socketsControllers,
+      bitisSocketsConfig: configManager.getConfig('bitisSocketsConfig'),
       onError: error => process.send(error)
     })
   } else {

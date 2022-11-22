@@ -76,7 +76,7 @@ export type Models = AnyClass[]
 export type ModelClasses = {
   [name: string]: AnyClass
 }
-export class ModelsManager {
+export class ModelManager {
   constructor(modelClasses: ModelClasses, lm: LibraryManager)
   public getModel<M = AnyClass>(name: string): M
 }

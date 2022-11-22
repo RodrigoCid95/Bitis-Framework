@@ -1,4 +1,4 @@
-import { LibraryManager, ModelsManager } from './../core'
+import { AnyClass, LibraryManager, ModelManager } from './../core'
 import * as SocketIO from 'socket.io'
 import * as http from 'http'
 /**
@@ -32,7 +32,7 @@ export interface ResponseError {
 /**
  * Structure of an response.
  */
-export interface SocketsResponse {
+export interface SocketResponse {
   /**
    * Response data.
    * @type {any}
@@ -69,7 +69,7 @@ export interface BitisSocketsConfig extends Partial<SocketIO.ServerOptions> {
     /**
      * Called before returning a response to the client.
      */
-    onBeforeToAnswer?: (response: SocketsResponse | ResponseError, socket: Socket, getLibraryInstance: LibraryManager['getLibrary']) => SocketsResponse | ResponseError
+    onBeforeToAnswer?: (response: SocketResponse | ResponseError, socket: Socket, getLibraryInstance: LibraryManager['getLibrary']) => SocketResponse | ResponseError
     /**
      * Called when a call is made by the customer.
      */
@@ -89,9 +89,9 @@ export function Prefix(prefix: string): <T extends new (...args: any[]) => {}>(c
 } & T
 export type OptionsSocketsServer = {
   http?: http.Server
-  mm: ModelsManager
-  lm: LibraryManager
-  distDir: string
+  modelManager: ModelManager
+  libraryManager: LibraryManager
+  socketsControllers: AnyClass
   bitisSocketsConfig?: BitisSocketsConfig
   onError?: (error: any) => void
 }
