@@ -15,7 +15,7 @@
     const bitisSettings = pack.bitis || {}
     const type = bitisSettings.type || flags.get('type') || 'http'
     const boot = bitisSettings.boot || 'auto'
-    const releaseDir = path.join(mainDir, '.release')
+    const releaseDir = (bitisSettings.releaseDir && typeof bitisSettings.releaseDir === 'string') ? path.resolve(mainDir, bitisSettings.releaseDir) : path.join(mainDir, '.release')
     const distDir = (command === 'build') ? path.join(releaseDir, 'server') : path.join(mainDir, '.debugger')
 
     if (fs.existsSync(distDir)) {
